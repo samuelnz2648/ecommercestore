@@ -1,4 +1,5 @@
 // ecommercestore/backend/models/index.js
+
 const User = require("./User");
 const Product = require("./Product");
 const Cart = require("./Cart");
