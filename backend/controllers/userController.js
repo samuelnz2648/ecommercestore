@@ -1,8 +1,8 @@
 // ecommercestore/backend/controllers/userController.js
 
 const User = require("../models/User");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
+const generateToken = require("../utils/generateToken");
+const { hashPassword, comparePassword } = require("../utils/hashPassword");
 
 // @desc    Register a new user
 // @route   POST /api/users/register
@@ -17,11 +17,14 @@ exports.registerUser = async (req, res) => {
       return res.status(400).json({ message: "User already exists" });
     }
 
+    // Hash password
+    const hashedPassword = await hashPassword(password);
+
     // Create new user
     const user = await User.create({
       name,
       email,
-      password,
+      password: hashedPassword,
       role: role || "customer", // Default to customer if role not specified
     });
 
@@ -52,7 +55,7 @@ exports.loginUser = async (req, res) => {
     // Check for user email
     const user = await User.findOne({ where: { email } });
 
-    if (user && (await user.comparePassword(password))) {
+    if (user && (await comparePassword(password, user.password))) {
       res.json({
         id: user.id,
         name: user.name,
@@ -67,11 +70,4 @@ exports.loginUser = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Server error" });
   }
-};
-
-// Generate JWT
-const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: "30d",
-  });
 };
