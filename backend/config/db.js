@@ -1,16 +1,11 @@
 // ecommercestore/backend/config/db.js
 
 const { Sequelize } = require("sequelize");
-require("dotenv").config();
+const config = require("./dotenv");
 
-const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASSWORD,
-  {
-    host: process.env.DB_HOST,
-    dialect: "mysql",
-  }
-);
+const sequelize = new Sequelize(config.DATABASE_URL, {
+  dialect: "mysql",
+  logging: config.NODE_ENV === "development" ? console.log : false,
+});
 
 module.exports = sequelize;
