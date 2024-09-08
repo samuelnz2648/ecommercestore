@@ -1,8 +1,7 @@
 // ecommercestore/backend/middleware/authMiddleware.js
 
-const jwt = require("jsonwebtoken");
 const User = require("../models/User");
-const config = require("../config/dotenv");
+const { verifyToken } = require("../utils/generateToken");
 
 const protect = async (req, res, next) => {
   let token;
@@ -16,7 +15,7 @@ const protect = async (req, res, next) => {
       token = req.headers.authorization.split(" ")[1];
 
       // Verify token
-      const decoded = jwt.verify(token, config.JWT_SECRET);
+      const decoded = verifyToken(token);
 
       // Get user from the token
       req.user = await User.findByPk(decoded.id, {

@@ -8,4 +8,8 @@ const generateToken = (userId) => {
   });
 };
 
-module.exports = generateToken;
+const verifyToken = (token) => {
+  return jwt.verify(token, config.JWT_SECRET);
+};
+
+module.exports = { generateToken, verifyToken };
