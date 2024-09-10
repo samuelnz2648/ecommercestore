@@ -1,15 +1,22 @@
 // ecommercestore/frontend/src/components/Navbar.js
 
 import React, { useContext } from "react";
-import { Navbar as BootstrapNavbar, Nav, Container } from "react-bootstrap";
+import {
+  Navbar as BootstrapNavbar,
+  Nav,
+  Container,
+  Badge,
+} from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
+import { CartContext } from "../context/CartContext";
 
 const Navbar = () => {
   const { user, logout } = useContext(UserContext);
+  const { cart } = useContext(CartContext);
 
   return (
-    <BootstrapNavbar bg="light" expand="lg">
+    <BootstrapNavbar bg="light" expand="lg" className="mb-3">
       <Container>
         <BootstrapNavbar.Brand as={Link} to="/">
           eCommerce Store
@@ -26,11 +33,19 @@ const Navbar = () => {
             {user ? (
               <>
                 <Nav.Link as={Link} to="/cart">
-                  Cart
+                  Cart{" "}
+                  {cart.items.length > 0 && (
+                    <Badge bg="secondary">{cart.items.length}</Badge>
+                  )}
                 </Nav.Link>
                 <Nav.Link as={Link} to="/orders">
                   Orders
                 </Nav.Link>
+                {user.role === "admin" && (
+                  <Nav.Link as={Link} to="/admin">
+                    Admin
+                  </Nav.Link>
+                )}
                 <Nav.Link onClick={logout}>Logout</Nav.Link>
               </>
             ) : (

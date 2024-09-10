@@ -36,6 +36,18 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  const register = async (name, email, password) => {
+    try {
+      const response = await api.register({ name, email, password });
+      toast.success("Registered successfully! Please log in.");
+      return response.data;
+    } catch (error) {
+      console.error("Registration error:", error);
+      toast.error("Registration failed. Please try again.");
+      throw error;
+    }
+  };
+
   const logout = () => {
     setUser(null);
     localStorage.removeItem("token");
@@ -43,8 +55,10 @@ export const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ user, login, logout }}>
+    <UserContext.Provider value={{ user, login, logout, register }}>
       {children}
     </UserContext.Provider>
   );
 };
+
+export default UserProvider;
