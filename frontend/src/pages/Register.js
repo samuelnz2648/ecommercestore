@@ -11,6 +11,7 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [role, setRole] = useState("customer");
   const [error, setError] = useState("");
   const { register } = useContext(UserContext);
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ const Register = () => {
     }
 
     try {
-      await register(name, email, password);
+      await register(name, email, password, role);
       toast.success("Registered successfully! Please log in.");
       navigate("/login");
     } catch (err) {
@@ -81,6 +82,14 @@ const Register = () => {
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
           />
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="formBasicRole">
+          <Form.Label>Account Type</Form.Label>
+          <Form.Select value={role} onChange={(e) => setRole(e.target.value)}>
+            <option value="customer">Customer</option>
+            <option value="admin">Admin</option>
+          </Form.Select>
         </Form.Group>
 
         <Button variant="primary" type="submit" className="mb-3">
