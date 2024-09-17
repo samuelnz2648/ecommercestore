@@ -1,7 +1,7 @@
 // ecommercestore/backend/models/Order.js
 
 const { DataTypes } = require("sequelize");
-const sequelize = require("../config/db");
+const { sequelize } = require("../config/db");
 
 const Order = sequelize.define("Order", {
   id: {
